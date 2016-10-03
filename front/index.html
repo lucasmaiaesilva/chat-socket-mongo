@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>test socket io</title>
+</head>
+<body>
+  <h1>Test socket io</h1>
+  <p>Realtime message <span data-js="message"></span></p>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io('http://localhost:8080');
+    var $msg = document.querySelector('[data-js="message"]');
+    socket.on('news', function(data){
+      $msg.textContent = '';
+      data.forEach(function(data){
+        $msg.textContent += data.msg + ' - ';
+      });
+      console.log(data);
+    });
+
+  </script>
+</body>
+</html>
