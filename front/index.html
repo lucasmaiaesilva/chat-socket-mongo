@@ -7,20 +7,70 @@
   <title>test socket io</title>
 </head>
 <body>
+
   <h1>Test socket io</h1>
+
+  <form data-js="form">
+    <input type="text" data-js="inputmsg" />
+    <button type="submit">Enviar mensagem</button>
+  </form>
+
   <p>Realtime message <span data-js="message"></span></p>
+
   <script src="/socket.io/socket.io.js"></script>
+
   <script>
+  (function(io){
+    'use strict';
     var socket = io('http://localhost:8080');
     var $msg = document.querySelector('[data-js="message"]');
     socket.on('news', function(data){
+
       $msg.textContent = '';
       data.forEach(function(data){
         $msg.textContent += data.msg + ' - ';
       });
-      console.log(data);
-    });
 
+    });
+  }(io));
+  </script>
+
+  <script>
+  (function(){
+    'use strict';
+    // var name = 'lucas';
+    var user = null;
+
+    var $form = document.querySelector('[data-js="form"]');
+    $form.addEventListener('submit', handleSubmit,false);
+
+    function handleSubmit(e){
+      e.preventDefault();
+      postAjaxData();
+      $form.reset();
+    }
+
+    function postAjaxData() {
+
+      var ajax = new XMLHttpRequest();
+      if(user === null)
+        user = 'anônimo';
+      var $message = document.querySelector('[data-js="inputmsg"]');
+
+      ajax.open('POST', 'http://localhost:8080/msg');
+      ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      ajax.send('name='+ user +'&msg='+ $message.value);
+      console.log('enviando mensagem...');
+      if(isRequestOk)
+        console.log('mensagem enviada!');
+
+    }
+
+    function isRequestOk(aj){
+      return aj.readyState === 4;
+    }
+
+  }());
   </script>
 </body>
 </html>
