@@ -2,6 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 // mongoose settings
 var MsgSocket = require('./models/modelMsg');
@@ -31,6 +32,12 @@ function pegarInformacoes(){
 }
 
 // config to receive posts
+var corsOptions = {
+  origin: 'http://localhost:8000',
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
